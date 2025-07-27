@@ -50,15 +50,6 @@ func handle_chunk_offset() -> void:
 				child.previous_position = child.position
 				child.terrain_biome.noise.offset = Vector3(child.position.x,child.position.z,0)
 				generate_terrain(child)
-		elif child is TerrainWater:
-			generate_area(child)
-
-func generate_area(_chunk : TerrainWater) -> void:
-	pass
-
-func update_depth(_chunk : TerrainWater) -> void:
-	if _chunk.water_area3D and _chunk.water_area3D != null:
-		pass
 
 func generate_terrain(_chunk : TerrainChunk) -> void:
 	if is_inside_tree():
