@@ -4,6 +4,7 @@ class_name CameraRig extends Node3D
 @export var camera : Camera3D
 @export var spring_arm : SpringArm3D
 @export var movement_ray : RayCast3D
+@export var camera_tracker_area : Area3D
 
 const MOVE_SPEED : float = 3.5
 const ROTATE_SPEED : float = 25.0
@@ -49,13 +50,16 @@ func set_target(_target : Node3D) -> void:
 	target = _target
 
 func monitor_if_above_water() -> void:
-	if camera.global_position.y <= 0:
-		if not below_water:
-			if target is Creature:
-				var _target : Creature = target
-				#if _target.
-			below_water = true
-			print_debug("camera is below water")
+	if camera_tracker_area.get_overlapping_areas():
+		for area in camera_tracker_area.get_overlapping_areas():
+			if area.get_parent_node_3d() is TerrainWater:
+				if not below_water:
+					below_water = true
+					print_debug("camera is below water")
+			else:
+				if below_water:
+					below_water = false
+					print_debug("camera is above water")
 	else:
 		if below_water:
 			below_water = false

@@ -2,7 +2,6 @@
 class_name TerrainManager extends Node
 
 @export var regenerate : bool = false
-@export var rough_ground : PhysicsMaterial
 
 const PLANE_SIZE : int = 256
 var time : float = 0.0
@@ -92,6 +91,7 @@ func get_height(_chunk : TerrainChunk,_noise : FastNoiseLite,_x : float,_y : flo
 	return new_height
 
 func modify_noise(_new_height : float) -> float:
+	# <TODO> Add means to modify noise value to create mountain ranges, plateaus, etcs.
 	return _new_height
 
 func get_normal(_chunk : TerrainChunk,_noise : FastNoiseLite,_x : float,_y : float) -> Vector3:
@@ -108,5 +108,3 @@ func generate_collider(_chunk : TerrainChunk) -> void:
 		for child in _chunk.get_children():
 			child.queue_free()
 	_chunk.create_trimesh_collision()
-	var collider : StaticBody3D = _chunk.get_child(0)
-	collider.physics_material_override = rough_ground

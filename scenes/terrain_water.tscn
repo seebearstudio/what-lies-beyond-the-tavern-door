@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=4 uid="uid://ceq7fuk2tetkb"]
+
+[ext_resource type="Material" uid="uid://chlb0n10nrnor" path="res://materials/mat_water.tres" id="1_3fq6q"]
+[ext_resource type="Script" uid="uid://11s70cu456r4" path="res://scripts/terrain_water.gd" id="2_32ppm"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_choun"]
+_surfaces = [{
+"aabb": AABB(-128, 0, -128, 256, 1e-05, 256),
+"attribute_data": PackedByteArray("AACAPwAAgD/NzEw/AACAP5qZGT8AAIA/zMzMPgAAgD/MzEw+AACAPwAAAAAAAIA/AACAP83MTD/NzEw/zcxMP5qZGT/NzEw/zMzMPs3MTD/MzEw+zcxMPwAAAADNzEw/AACAP5qZGT/NzEw/mpkZP5qZGT+amRk/zMzMPpqZGT/MzEw+mpkZPwAAAACamRk/AACAP8zMzD7NzEw/zMzMPpqZGT/MzMw+zMzMPszMzD7MzEw+zMzMPgAAAADMzMw+AACAP8zMTD7NzEw/zMxMPpqZGT/MzEw+zMzMPszMTD7MzEw+zMxMPgAAAADMzEw+AACAPwAAAADNzEw/AAAAAJqZGT8AAAAAzMzMPgAAAADMzEw+AAAAAAAAAAAAAAAA"),
+"format": 34359742487,
+"index_count": 150,
+"index_data": PackedByteArray("AAABAAYAAQAHAAYAAQACAAcAAgAIAAcAAgADAAgAAwAJAAgAAwAEAAkABAAKAAkABAAFAAoABQALAAoABgAHAAwABwANAAwABwAIAA0ACAAOAA0ACAAJAA4ACQAPAA4ACQAKAA8ACgAQAA8ACgALABAACwARABAADAANABIADQATABIADQAOABMADgAUABMADgAPABQADwAVABQADwAQABUAEAAWABUAEAARABYAEQAXABYAEgATABgAEwAZABgAEwAUABkAFAAaABkAFAAVABoAFQAbABoAFQAWABsAFgAcABsAFgAXABwAFwAdABwAGAAZAB4AGQAfAB4AGQAaAB8AGgAgAB8AGgAbACAAGwAhACAAGwAcACEAHAAiACEAHAAdACIAHQAjACIA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 36,
+"vertex_data": PackedByteArray("AAAAQwAAAAAAAABDmpmZQgAAAAAAAABDzszMQQAAAAAAAABDzMzMwQAAAAAAAABDmZmZwgAAAAAAAABD////wgAAAAAAAABDAAAAQwAAAACamZlCmpmZQgAAAACamZlCzszMQQAAAACamZlCzMzMwQAAAACamZlCmZmZwgAAAACamZlC////wgAAAACamZlCAAAAQwAAAADOzMxBmpmZQgAAAADOzMxBzszMQQAAAADOzMxBzMzMwQAAAADOzMxBmZmZwgAAAADOzMxB////wgAAAADOzMxBAAAAQwAAAADMzMzBmpmZQgAAAADMzMzBzszMQQAAAADMzMzBzMzMwQAAAADMzMzBmZmZwgAAAADMzMzB////wgAAAADMzMzBAAAAQwAAAACZmZnCmpmZQgAAAACZmZnCzszMQQAAAACZmZnCzMzMwQAAAACZmZnCmZmZwgAAAACZmZnC////wgAAAACZmZnCAAAAQwAAAAD////CmpmZQgAAAAD////CzszMQQAAAAD////CzMzMwQAAAAD////CmZmZwgAAAAD////C////wgAAAAD////C/3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+/")
+}]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tipki"]
+size = Vector3(250, 50, 250)
+
+[node name="TerrainWater" type="MeshInstance3D" node_paths=PackedStringArray("terrain_manager")]
+layers = 2
+mesh = SubResource("ArrayMesh_choun")
+surface_material_override/0 = ExtResource("1_3fq6q")
+script = ExtResource("2_32ppm")
+oscillation_speed = 0.5
+wave_amplitude = 0.01
+terrain_manager = NodePath("")
+metadata/_custom_type_script = "uid://11s70cu456r4"
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -25, 0)
+shape = SubResource("BoxShape3D_tipki")
