@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://bgw1dwa46adw7"]
+
+[ext_resource type="Script" uid="uid://bqqvkqsbahg47" path="res://scripts/camera_rig.gd" id="1_txy7i"]
+
+[node name="CameraRig" type="Node3D" node_paths=PackedStringArray("camera", "spring_arm", "movement_ray")]
+script = ExtResource("1_txy7i")
+camera = NodePath("SpringArm3D/Camera3D")
+spring_arm = NodePath("SpringArm3D")
+movement_ray = NodePath("SpringArm3D/Camera3D/MovementRay")
+metadata/_custom_type_script = "uid://bqqvkqsbahg47"
+
+[node name="SpringArm3D" type="SpringArm3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1.5, 0)
+spring_length = 5.0
+
+[node name="Camera3D" type="Camera3D" parent="SpringArm3D"]
+size = 10.0
+
+[node name="MovementRay" type="RayCast3D" parent="SpringArm3D/Camera3D"]
+collision_mask = 5
+collide_with_areas = true
