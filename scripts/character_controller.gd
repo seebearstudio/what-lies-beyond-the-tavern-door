@@ -3,6 +3,7 @@ class_name CharacterController extends Object
 const DECELERATION_SPEED : float = 3.5
 const ROTATE_SPEED : float = 2.0
 const BACKWARD_MOVEMENT_MODIFIER : float = 0.5
+const SLOPE_CLIMB_SPEED : float = 5.0
 
 static func handle_physics_loop(_creature : Creature, _delta : float) -> void:
 	handle_gravity(_creature,_delta)
@@ -12,20 +13,30 @@ static func handle_physics_loop(_creature : Creature, _delta : float) -> void:
 	if not _creature.locomotive_state == Creature.LOCOMOTIVE_STATE.IDLE:
 		_creature.move_and_slide()
 
+	# <TODO>
+	# [ ] Handle player getting stuck on too steep of slope
+	# [ ] Add hill traversing
+	# [ ] Add stair climbing
+	# [ ] Add obstacle hurdling
+	# [ ] Add wall climbing
+
 static func handle_gravity(_creature : Creature, _delta : float) -> void:
 	if _creature.down_ray.is_colliding():
 		var collision := _creature.down_ray.get_collider()
 		if collision is StaticBody3D:
 			if _creature.locomotive_state == Creature.LOCOMOTIVE_STATE.FALLING:
+				_creature.fall_timer.stop()
 				set_locomotive_state(_creature,Creature.LOCOMOTIVE_STATE.IDLE)
 	else:
-		set_locomotive_state(_creature,Creature.LOCOMOTIVE_STATE.FALLING)
+		if not _creature.locomotive_state == Creature.LOCOMOTIVE_STATE.FALLING:
+			_creature.fall_timer.start()
+			set_locomotive_state(_creature,Creature.LOCOMOTIVE_STATE.FALLING)
 		_creature.velocity.y = Vector3.DOWN.y * _creature.FALL_SPEED
 
 static func set_locomotive_state(_creature : Creature,_state : Creature.LOCOMOTIVE_STATE) -> void:
 	if not _creature.locomotive_state == _state:
 		_creature.locomotive_state = _state
-		print_debug(str(_creature.name) + " locomotive state set to " + str(Creature.LOCOMOTIVE_STATE.keys()[_state]))
+		#print_debug(str(_creature.name) + " locomotive state set to " + str(Creature.LOCOMOTIVE_STATE.keys()[_state]))
 
 static func handle_rotation(_creature : Creature, _delta : float) -> void:
 	var input_dir = Input.get_axis("ROTATE_LEFT", "ROTATE_RIGHT")

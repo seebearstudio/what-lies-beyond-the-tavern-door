@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://cwo7e6t2itlqu"]
+[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://cwo7e6t2itlqu"]
 
 [ext_resource type="Shader" uid="uid://br6kiqwactfph" path="res://textures/shader/terrain.gdshader" id="1_tr6cq"]
 
@@ -9,8 +9,18 @@ colors = PackedColorArray(0.0728426, 0.0728426, 0.0728426, 1, 0.27, 0.21078, 0.1
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_67ue7"]
 gradient = SubResource("Gradient_8u72k")
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_tipki"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_tr6cq"]
+width = 256
+height = 256
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_tipki")
+
 [resource]
 render_priority = 0
 shader = ExtResource("1_tr6cq")
 shader_parameter/height = 64.0
 shader_parameter/color_gradient = SubResource("GradientTexture1D_67ue7")
+shader_parameter/normal_map = SubResource("NoiseTexture2D_tr6cq")

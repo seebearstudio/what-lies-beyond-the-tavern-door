@@ -67,7 +67,6 @@ CAMERA_ROTATE_LEFT={
 3d_render/layer_2="Non-Decal"
 3d_physics/layer_1="Terrain"
 3d_physics/layer_2="Creatures"
-3d_physics/layer_3="RangeIndicators"
 
 [physics]
 
