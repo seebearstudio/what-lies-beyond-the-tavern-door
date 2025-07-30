@@ -7,7 +7,6 @@ enum LOCOMOTIVE_STATE {IDLE,WALKING,WALKING_BACKWARDS,RUNNING,FALLING}
 var locomotive_state : LOCOMOTIVE_STATE = LOCOMOTIVE_STATE.IDLE
 
 const FALL_SPEED : float = 9.8
-var falling : bool = false
 
 var move_speed : float = 2.0
 
@@ -20,6 +19,7 @@ var move_speed : float = 2.0
 @export var animation_player : AnimationPlayer
 @export var fall_timer : Timer
 @export var down_ray : RayCast3D
+@export var slope_ray : RayCast3D
 
 func _process(_delta: float) -> void:
 	manage_locomotion_animations()
