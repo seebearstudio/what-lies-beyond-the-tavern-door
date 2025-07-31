@@ -16,9 +16,11 @@ var move_speed : float = 2.0
 @export var fall_anim_string : String = "TPose"
 
 @export_group("Components")
+@export var rig : Node3D
 @export var animation_player : AnimationPlayer
 @export var fall_timer : Timer
 @export var down_ray : RayCast3D
+@export var grounding_ray : RayCast3D
 @export var slope_ray : RayCast3D
 
 func _process(_delta: float) -> void:

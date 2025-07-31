@@ -1,0 +1,26 @@
+[gd_scene load_steps=0 format=3 uid="uid://ycssdv5tbq1o"]
+
+[node name="Stairs" type="CSGCombiner3D"]
+use_collision = true
+collision_layer = 5
+collision_mask = 3
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0999999)
+size = Vector3(1, 0.25, 0.5)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0.4)
+size = Vector3(1, 0.25, 0.5)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.9)
+size = Vector3(1, 0.25, 0.5)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 1.4)
+size = Vector3(1, 0.25, 0.5)
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1.9)
+size = Vector3(1, 0.25, 0.5)
