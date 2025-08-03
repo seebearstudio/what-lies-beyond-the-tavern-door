@@ -17,6 +17,7 @@ var move_speed : float = 2.0
 
 @export_group("Components")
 @export var rig : Node3D
+@export var collision_shape : CollisionShape3D
 @export var animation_player : AnimationPlayer
 @export var fall_timer : Timer
 @export var down_ray : RayCast3D

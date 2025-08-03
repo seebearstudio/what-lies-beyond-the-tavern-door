@@ -2,23 +2,32 @@ class_name CharacterController extends Object
 
 	# <TODO>
 	# [ x ] Handle player getting stuck on too steep of terrain <- I think the creature collider naturally does this now that the slope ray is positioned lower down the creature collider
-	# [ / ] Add slope traversing - currently working as intended while moving forward - either need to add additional ray for backward slope walking, or shift position of current one when moving backward
-	# [ / ] Add stair climbing - same note as slope traversing, however there is a jitter while moving on steps that would be nice to eliminate
+	# [ x ] Add slope traversing - currently working as intended while moving forward - either need to add additional ray for backward slope walking, or shift position of current one when moving backward
+	# [ x ] Add stair climbing - same note as slope traversing
+	# [   ] Fix jitter while moving on stairs
 	# [ x ] Fix launching of character when rotating on stairs
 	# [   ] Fix creature collision shape from hovering after stepping off of elevation. Likely need to revist state machine.
 	# [   ] Add obstacle hurdling
 	# [   ] Add wall climbing
+	# [   ] Add jumping
+	# [   ] Add running
+	# [   ] Add sneaking
 
 const DECELERATION_SPEED : float = 3.5
 const ROTATE_SPEED : float = 2.0
 const BACKWARD_MOVEMENT_MODIFIER : float = 0.5
 const SLOPE_MAX_ANGLE : float = 45.0
 const SLOPE_RAY_OFFSET : float = 0.5 # this needs to be the distance the ray is from the origin of the Creature. Could be set programatically... but just don't move it without updating this value.
+const SLOPE_RAY_FORWARD_POSITION : Vector3 = Vector3(0.0,0.75,-0.5)
+const SLOPE_RAY_BACKWARD_POSITION : Vector3 = Vector3(0.0,0.75,0.5)
+const GROUNDING_RAY_FORWARD_POSITION : Vector3 = Vector3(0.0,0.5,-0.25)
+const GROUNDING_RAY_BACKWARD_POSITION : Vector3 = Vector3(0.0,0.5,0.25)
 
 static var on_slope : bool = false
 
 # Called in game.gd
 static func handle_physics_loop(_creature : Creature,_delta : float) -> void:
+	position_rays(_creature)
 	handle_slopes(_creature)
 	handle_gravity(_creature)
 	prevent_endless_slide(_creature)
@@ -29,6 +38,15 @@ static func handle_physics_loop(_creature : Creature,_delta : float) -> void:
 	if not _creature.locomotive_state == Creature.LOCOMOTIVE_STATE.IDLE:
 		_creature.move_and_slide()
 	ground_rig(_creature)
+
+static func position_rays(_creature : Creature) -> void:
+	var input_dir : float = Input.get_axis("MOVE_FORWARD","MOVE_BACK")
+	if input_dir < 0.0:
+		_creature.grounding_ray.position = GROUNDING_RAY_FORWARD_POSITION
+		_creature.slope_ray.position = SLOPE_RAY_FORWARD_POSITION
+	elif input_dir > 0.0:
+		_creature.grounding_ray.position = GROUNDING_RAY_BACKWARD_POSITION
+		_creature.slope_ray.position = SLOPE_RAY_BACKWARD_POSITION
 
 static func handle_slopes(_creature : Creature) -> void:
 	if _creature.slope_ray.is_colliding():
@@ -44,7 +62,7 @@ static func get_angle(_creature : Creature) -> float:
 	return tangent
 
 static func handle_gravity(_creature : Creature) -> void:
-	if _creature.down_ray.is_colliding():
+	if _creature.down_ray.is_colliding() or _creature.grounding_ray.is_colliding():
 		var collision := _creature.down_ray.get_collider()
 		if collision is StaticBody3D:
 			if _creature.locomotive_state == Creature.LOCOMOTIVE_STATE.FALLING:
