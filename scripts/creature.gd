@@ -9,7 +9,7 @@ var locomotive_state : LOCOMOTIVE_STATE = LOCOMOTIVE_STATE.IDLE
 const FALL_SPEED : float = 9.8
 
 var move_speed : float = 2.0
-var jump_velocity : float = 500.0
+var jump_velocity : float = 80.0
 
 @export_group("Animation Settings")
 @export var idle_anim_string : String = "Idle_1"
@@ -36,6 +36,9 @@ func manage_locomotion_animations() -> void:
 		if fall_timer.is_stopped():
 			if animation_player.current_animation != fall_anim_string:
 				animation_player.play(fall_anim_string)
+	elif locomotive_state == LOCOMOTIVE_STATE.JUMPING:
+		if animation_player.current_animation != jump_anim_string:
+			animation_player.play(jump_anim_string)
 	elif locomotive_state == LOCOMOTIVE_STATE.IDLE:
 		if animation_player.current_animation != idle_anim_string:
 			animation_player.play(idle_anim_string)

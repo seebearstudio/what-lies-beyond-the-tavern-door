@@ -1,18 +1,31 @@
 class_name CharacterController extends Object
 
-	# <TODO>
-	# [ x ] Handle player getting stuck on too steep of terrain <- swapping ray positions has helped with this, allowing player to be able to back up.
-	# [ x ] Add slope traversing - currently working as intended while moving forward - either need to add additional ray for backward slope walking, or shift position of current one when moving backward
-	# [ x ] Add stair climbing - same note as slope traversing
-	# [ / ] Fix jitter while moving on stairs - removed falling animation while on stairs, but still some pop in the step due to lerping the y-pos with a scalar of 1.0
-	# [ x ] Fix launching of character when rotating on stairs
-	# [ - ] (I THINK THIS IS NOW A NON-ISSUE) Fix creature collision shape from hovering after stepping off of elevation. Likely need to revist state machine.
-	# [   ] Add jumping <TODO> Need an animation for humanoid running
-	# [ x ] Add running <TODO> Need an animation for humanoid running
-	# [ x ] Add sneaking <TODO> Need an animation for humanoid sneaking
-	# [   ] Add obstacle hurdling
-	# [   ] Add wall climbing
+#	  <TODO>
 
+#	   Completed
+#	   [ X ] Handle player getting stuck on too steep of terrain <- swapping ray positions has helped with this, allowing player to be able to back up.
+#	   [ X ] Add slope traversing - currently working as intended while moving forward - either need to add additional ray for backward slope walking, or shift position of current one when moving backward
+#	   [ X ] Add stair climbing - same note as slope traversing
+#	   [ X ] Fix launching of character when rotating on stairs
+#	   [ X ] Add running
+#	   [ X ] Add sneaking
+
+#	   WIP
+#	   [ / ] Fix jitter while moving on stairs - removed falling animation while on stairs, but still some pop in the step due to lerping the y-pos with a scalar of 1.0
+#	   [ / ] Add jumping -> Just adding velocity sucks. Need to do some research on parabolic jumping.
+
+#	   Open
+#	   [   ] Add animation for humanoid jumping
+#	   [   ] Add animation for humanoid running
+#	   [   ] Add animation for humanoid sneaking
+#	   [   ] Add obstacle hurdling
+#	   [   ] Add wall climbing
+#	   [   ] Add dodging
+
+#	   Cancelled
+#	   [ - ] (I THINK THIS IS NOW A NON-ISSUE) Fix creature collision shape from hovering after stepping off of elevation. Likely need to revist state machine.
+
+const JUMP_SPEED : float = 40.0
 const ROTATE_SPEED : float = 2.0
 const DECELERATION_SPEED : float = 3.5
 
@@ -43,18 +56,28 @@ static func handle_physics_loop(_creature : Creature,_delta : float) -> void:
 	handle_gravity(_creature)
 	prevent_endless_slide(_creature)
 	if not _creature.locomotive_state == Creature.LOCOMOTIVE_STATE.FALLING:
-		handle_rotation(_creature,_delta)
-		handle_running()
-		handle_sneaking()
-		handle_movement(_creature)
-		handle_stairs(_creature)
+		if not _creature.locomotive_state == Creature.LOCOMOTIVE_STATE.JUMPING:
+			handle_rotation(_creature,_delta)
+			handle_running()
+			handle_sneaking()
+			handle_movement(_creature)
+			handle_stairs(_creature)
+			handle_jumping(_creature,_delta)
 	if not _creature.locomotive_state == Creature.LOCOMOTIVE_STATE.IDLE:
 		_creature.move_and_slide()
+
+static func handle_jumping(_creature : Creature,_delta : float) -> void:
+	if _creature.locomotive_state == Creature.LOCOMOTIVE_STATE.JUMPING:
+		set_locomotive_state(_creature,Creature.LOCOMOTIVE_STATE.JUMPING)
+	else:
+		if _creature.down_ray.is_colliding() or _creature.slope_ray.is_colliding():
+			if Input.is_action_just_released("JUMP"):
+				print_debug("jump")
+				_creature.velocity = lerp(_creature.velocity,_creature.velocity + (Vector3.UP * _creature.jump_velocity),_delta * JUMP_SPEED)
 
 static func set_locomotive_state(_creature : Creature,_state : Creature.LOCOMOTIVE_STATE) -> void:
 	if not _creature.locomotive_state == _state:
 		_creature.locomotive_state = _state
-		#print_debug(str(_creature.name) + " locomotive state set to " + str(Creature.LOCOMOTIVE_STATE.keys()[_state]))
 
 static func position_rays(_creature : Creature) -> void:
 	var input_dir : float = Input.get_axis("MOVE_FORWARD","MOVE_BACK")
