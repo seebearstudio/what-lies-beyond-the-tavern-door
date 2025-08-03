@@ -5,7 +5,7 @@ class_name UiManager extends Control
 @export var game : Game
 @export var ui_debug : Control
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if debug_active:
 		if not ui_debug.visible:
 			ui_debug.visible = true
