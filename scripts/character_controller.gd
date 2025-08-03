@@ -4,6 +4,7 @@ class_name CharacterController extends Object
 	# [ x ] Handle player getting stuck on too steep of terrain <- I think the creature collider naturally does this now that the slope ray is positioned lower down the creature collider
 	# [ / ] Add slope traversing - currently working as intended while moving forward - either need to add additional ray for backward slope walking, or shift position of current one when moving backward
 	# [ / ] Add stair climbing - same note as slope traversing, however there is a jitter while moving on steps that would be nice to eliminate
+	# [ x ] Fix launching of character when rotating on stairs
 	# [   ] Fix creature collision shape from hovering after stepping off of elevation. Likely need to revist state machine.
 	# [   ] Add obstacle hurdling
 	# [   ] Add wall climbing
@@ -95,11 +96,12 @@ static func handle_movement(_creature : Creature) -> void:
 			set_locomotive_state(_creature,Creature.LOCOMOTIVE_STATE.WALKING_BACKWARDS)
 			_creature.velocity = direction * _creature.move_speed * BACKWARD_MOVEMENT_MODIFIER
 	else:
+		_creature.velocity = Vector3.ZERO
 		set_locomotive_state(_creature,Creature.LOCOMOTIVE_STATE.IDLE)
 
 static func prevent_endless_slide(_creature : Creature) -> void:
 	if _creature.locomotive_state == Creature.LOCOMOTIVE_STATE.FALLING:
-		if _creature.down_ray.is_colliding() or _creature.grounding_ray.is_colliding() or _creature.slope_ray.is_colliding():
+		if _creature.down_ray.is_colliding() or _creature.slope_ray.is_colliding():
 			_creature.velocity = Vector3.ZERO
 			set_locomotive_state(_creature,Creature.LOCOMOTIVE_STATE.IDLE)
 
